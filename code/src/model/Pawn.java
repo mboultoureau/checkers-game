@@ -1,3 +1,5 @@
+package model;
+
 public class Pawn {
     public enum PAWN_COLOR { BLACK, WHITE };
     public enum PAWN_TYPE { PAWN, QUEEN };
