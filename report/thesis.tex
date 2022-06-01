@@ -1,0 +1,89 @@
+% (unofficial) La Trobe PhD Thesis Template
+% Copyright (C) 2018 Matthias Langer
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License along
+% with this program; if not, write to the Free Software Foundation, Inc.,
+% 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+%
+\documentclass[oneside,openright,titlepage,numbers=noenddot,headinclude,footinclude=true,cleardoublepage=empty,listof=totoc,paper=a4,fontsize=12pt,french,DIV=calc]{scrreprt} 
+
+% -----------------------------------------------------------------------------
+%   CONFIGURATION
+% -----------------------------------------------------------------------------
+% Thesis and submission:
+\newcommand{\myTitle}{Jeu de dames en Java}
+
+% University related:
+\newcommand{\myDepartment}{Informatique, Multimédia et Réseaux}
+\newcommand{\mySchool}{École Nationale Supérieure des Sciences Appliquées et de Technologie}
+\newcommand{\myUni}{Université de Rennes 1}
+
+% -----------------------------------------------------------------------------
+
+\input{classicthesis-config}
+\usepackage[a4paper,top=25.4mm,bottom=25.4mm,left=25mm, right=25mm,bindingoffset=6mm]{geometry} %This package resizes the margins to meet La Trobe's guidelines
+\usepackage{txfonts} % Font Times si jamais
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage[toc]{glossaries}
+
+%\input{text/glossaire}
+\makeglossaries
+\newglossaryentry{ENSSAT}
+{
+    name={ENSSAT},
+    description={École Nationale Supérieure des Sciences Appliquées et de Technologie}
+}
+\glsaddall
+
+\addbibresource{library.bib}
+
+\begin{document}
+\frenchspacing
+\raggedbottom
+\selectlanguage{french}
+\clearpairofpagestyles
+\rofoot[\pagemark]{\pagemark}
+
+\pagestyle{plain}
+\pagenumbering{gobble}
+
+\onehalfspacing
+\input{text/premierePage}
+
+\newpage \ \newpage % page blanche
+
+\pagestyle{scrheadings}
+\onehalfspacing
+\pagenumbering{arabic}
+
+\input{text/TableContent} % Table des matières
+\listoffigures
+% \setglossarystyle{listgroup} % changer le style du glossaire
+
+\chapter{Introduction}\label{c:Introduction}
+\input{text/introduction}
+
+\chapter{Jeu de Dames}\label{c:Developpement}
+\input{text/corps}
+
+\chapter{Conclusion}\label{c:Conclusion}
+\input{text/conclusion}
+
+\input{text/bibliographie}
+
+\chapter*{Annexes}
+\addcontentsline{toc}{chapter}{Annexes}
+\input{text/annexes}
+
+\end{document}
