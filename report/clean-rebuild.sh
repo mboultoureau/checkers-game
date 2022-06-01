@@ -1,0 +1,2 @@
+./cleanup.sh
+./build.sh
