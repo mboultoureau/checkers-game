@@ -2,15 +2,14 @@ package view;
 
 import model.Board;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Objects;
+=======
+>>>>>>> f463bf5e90d1757557e099b4df907b5fca265d45
 
 public class BoardView extends JFrame {
 
@@ -34,6 +33,17 @@ public class BoardView extends JFrame {
 
     public void display() {
         JPanel layout = new JPanel();
+<<<<<<< HEAD
+        layout.setLayout(new GridLayout(1, 1));
+
+        GridView gridView = null;
+        try {
+            gridView = new GridView(board);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        layout.add(gridView);
+=======
         playButton = new Button("Play");
         textUser1 = new TextField();
         textUser2 = new TextField();
@@ -57,6 +67,7 @@ public class BoardView extends JFrame {
             labelUser1.setSize(150, 40);
             labelUser1.setLocation(10, 10);
         }
+>>>>>>> 8d51e859a7e2a873de6669d638f72dac4d27feb7
 
         this.setContentPane(layout);
     }
