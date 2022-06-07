@@ -53,18 +53,36 @@ public class BoardView extends JFrame {
                 throw new RuntimeException(e);
             }
         } else {
-            this.setSize(450, 200);
-            this.setResizable(false);
+            this.setSize(450, 300);
+            this.setResizable(true);
             layout.setLayout(null);
 
-            ImageIcon imageIcon = new ImageIcon("/resources/homepage.png");
+            layout.add(playButton);
+            playButton.setSize(150, 60);
+            playButton.setLocation(50, 200);
+
+            layout.add(labelUser1);
+            labelUser1.setSize(180, 40);
+            labelUser1.setLocation(20, 110);
+            labelUser1.setForeground(Color.WHITE);
+            labelUser1.setFont(new Font("sans-serif", Font.BOLD, 18));
+
+            layout.add(labelUser2);
+            labelUser2.setSize(180, 40);
+            labelUser2.setLocation(20, 140);
+            labelUser2.setForeground(Color.WHITE);
+            labelUser2.setFont(new Font("sans-serif", Font.BOLD, 18));
+
+            layout.add(textUser1);
+            textUser1.setSize(150, 25);
+            textUser1.setLocation(200, 120);
+
+
+            ImageIcon imageIcon = new ImageIcon("src/main/resources/homepage.png");
             JLabel label = new JLabel(imageIcon);
             layout.add(label);
             label.setSize(500, 500);
-            label.setLocation(0, 0);
-            layout.add(labelUser1);
-            labelUser1.setSize(150, 40);
-            labelUser1.setLocation(10, 10);
+            label.setLocation(-25, -100);
         }
 
         this.setContentPane(layout);
