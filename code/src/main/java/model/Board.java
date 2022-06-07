@@ -80,6 +80,10 @@ public class Board {
         return this.pawns.get(row).get(column);
     }
 
+    public boolean isMovable(int row, int column) {
+        return this.pawnsMoves.get(row).get(column);
+    }
+
     public boolean canBeSelected(Pawn pawn) {
         return true;
     }

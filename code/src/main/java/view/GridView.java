@@ -31,15 +31,15 @@ public class GridView extends JPanel implements MouseListener {
         super.paintComponent(g);
         for (int row = 0; row < 10; row++) {
             for (int column = 0; column < 10; column++) {
-                if (row % 2 == 0 && column % 2 == 0 || row % 2 != 0 && column % 2 != 0) {
+                if (board.isMovable(row, column)) {
+                    g.setColor(Color.RED);
+                    g.fillRect(column * 50, row * 50, 50, 50);
+                } else if (row % 2 == 0 && column % 2 == 0 || row % 2 != 0 && column % 2 != 0) {
                     g.setColor(Color.WHITE);
                     g.fillRect(column * 50, row * 50, 50, 50);
-
-                    // g.drawImage(whitePawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
                 } else {
                     g.setColor(Color.BLACK);
                     g.fillRect(column * 50, row * 50, 50, 50);
-                    // g.drawImage(blackPawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
                 }
             }
         }

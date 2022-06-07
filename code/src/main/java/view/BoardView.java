@@ -28,7 +28,6 @@ public class BoardView extends JFrame {
 
     public void display() {
         JPanel layout = new JPanel();
-<<<<<<< HEAD
         layout.setLayout(new GridLayout(1, 1));
 
         GridView gridView = null;
@@ -38,7 +37,6 @@ public class BoardView extends JFrame {
             throw new RuntimeException(e);
         }
         layout.add(gridView);
-=======
         playButton = new Button("Play");
         textUser1 = new TextField();
         textUser2 = new TextField();
@@ -47,7 +45,11 @@ public class BoardView extends JFrame {
 
         if (false) {
             layout.setLayout(new GridLayout(1, 1));
-            layout.add(new GridView());
+            try {
+                layout.add(new GridView(this.board));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             this.setSize(450, 200);
             layout.setLayout(new GridLayout(3, 2, 20, 20));
@@ -57,7 +59,6 @@ public class BoardView extends JFrame {
             layout.add(textUser2);
             layout.add(playButton);
         }
->>>>>>> 8d51e859a7e2a873de6669d638f72dac4d27feb7
 
         this.setContentPane(layout);
     }
