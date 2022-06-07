@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BoardView extends JFrame {
 
@@ -44,12 +45,17 @@ public class BoardView extends JFrame {
             layout.add(new GridView());
         } else {
             this.setSize(450, 200);
-            layout.setLayout(new GridLayout(3, 2, 20, 20));
+            this.setResizable(false);
+            layout.setLayout(null);
+
+            ImageIcon imageIcon = new ImageIcon("/resources/homepage.png");
+            JLabel label = new JLabel(imageIcon);
+            layout.add(label);
+            label.setSize(500, 500);
+            label.setLocation(0, 0);
             layout.add(labelUser1);
-            layout.add(textUser1);
-            layout.add(labelUser2);
-            layout.add(textUser2);
-            layout.add(playButton);
+            labelUser1.setSize(150, 40);
+            labelUser1.setLocation(10, 10);
         }
 
         this.setContentPane(layout);
