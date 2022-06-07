@@ -7,19 +7,28 @@ public class Board {
 
     public static int COLUMNS = 10;
     public static int ROWS = 10;
-
-    private List<List<Pawn>> board;
+    private List<List<Pawn>> pawns;
+    private List<List<Boolean>> pawnsMoves;
+    private Pawn selectedPawn;
 
     public Board() {
-        this.board = new ArrayList<List<Pawn>>(ROWS);
+        this.pawns = new ArrayList<List<Pawn>>(ROWS);
+        this.pawnsMoves = new ArrayList<List<Boolean>>(ROWS);
         this.initBoard();
     }
 
     public void clearBoard() {
+        // Clear pawns
         for (int row = 0; row < ROWS; row++) {
-            this.board.get(row).clear();
+            this.pawns.get(row).clear();
         }
-        this.board.clear();
+        this.pawns.clear();
+
+        // Clear pawns moves
+        for (int row = 0; row < ROWS; row++) {
+            this.pawnsMoves.get(row).clear();
+        }
+        this.pawnsMoves.clear();
     }
 
     public void initBoard() {
@@ -52,15 +61,51 @@ public class Board {
                 }
             }
 
-            this.board.add(newRow);
+            this.pawns.add(newRow);
         }
+
+        // Pawns moves
+        for (int row = 0; row < ROWS; row++) {
+            ArrayList<Boolean> newRow = new ArrayList<Boolean>(COLUMNS);
+
+            for (int column = 0; column < COLUMNS; column++) {
+                newRow.add(false);
+            }
+
+            this.pawnsMoves.add(newRow);
+        }
+    }
+
+    public Pawn getPawn(int row, int column) {
+        return this.pawns.get(row).get(column);
+    }
+
+    public boolean canBeSelected(Pawn pawn) {
+        return true;
+    }
+    public void setSelected(Pawn pawn) {
+        this.selectedPawn = pawn;
+
+        int row = 0;
+        int column = 0;
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if (this.pawns.get(i).get(j) == pawn) {
+                    row = i;
+                    column = j;
+                }
+            }
+        }
+
+        pawnsMoves.get(row).set(column, true);
     }
 
     public void debugBoard() {
         for (int row = 0; row < ROWS; row++) {
             for (int column = 0; column < COLUMNS; column++) {
-                if (this.board.get(row).get(column) != null) {
-                    switch (this.board.get(row).get(column).getColor()) {
+                if (this.pawns.get(row).get(column) != null) {
+                    switch (this.pawns.get(row).get(column).getColor()) {
                         case WHITE -> System.out.print("W ");
                         case BLACK -> System.out.print("B ");
                         default -> System.out.print("? ");
