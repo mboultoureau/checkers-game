@@ -5,11 +5,8 @@ import model.Board;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Objects;
-=======
->>>>>>> f463bf5e90d1757557e099b4df907b5fca265d45
 
 public class BoardView extends JFrame {
 
