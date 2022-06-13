@@ -7,14 +7,18 @@ public class Board {
 
     public static int COLUMNS = 10;
     public static int ROWS = 10;
+    public enum CASE_MOVE { NONE, SELECTED, MOVED };
     private List<List<Pawn>> pawns;
-    private List<List<Boolean>> pawnsMoves;
+    private List<List<CASE_MOVE>> pawnsMoves;
     private Pawn selectedPawn;
+    private Pawn.PAWN_COLOR turn;
 
     public Board() {
         this.pawns = new ArrayList<List<Pawn>>(ROWS);
-        this.pawnsMoves = new ArrayList<List<Boolean>>(ROWS);
+        this.pawnsMoves = new ArrayList<List<CASE_MOVE>>(ROWS);
         this.initBoard();
+        this.resetPawnsMoves();
+        this.turn = Pawn.PAWN_COLOR.WHITE;
     }
 
     public void clearBoard() {
@@ -64,15 +68,21 @@ public class Board {
             this.pawns.add(newRow);
         }
 
-        // Pawns moves
+        // Initialization of pawns moves
         for (int row = 0; row < ROWS; row++) {
-            ArrayList<Boolean> newRow = new ArrayList<Boolean>(COLUMNS);
-
+            ArrayList<CASE_MOVE> newRow = new ArrayList<CASE_MOVE>(COLUMNS);
             for (int column = 0; column < COLUMNS; column++) {
-                newRow.add(false);
+                newRow.add(CASE_MOVE.NONE);
             }
-
             this.pawnsMoves.add(newRow);
+        }
+    }
+
+    public void resetPawnsMoves() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int column = 0; column < COLUMNS; column++) {
+                this.pawnsMoves.get(row).set(column, CASE_MOVE.NONE);
+            }
         }
     }
 
@@ -81,15 +91,28 @@ public class Board {
     }
 
     public boolean isMovable(int row, int column) {
-        return this.pawnsMoves.get(row).get(column);
+        return this.pawnsMoves.get(row).get(column) == CASE_MOVE.MOVED;
+    }
+
+    public boolean isSelected(int row, int column) {
+        return this.pawnsMoves.get(row).get(column) == CASE_MOVE.SELECTED;
     }
 
     public boolean canBeSelected(Pawn pawn) {
+        if (pawn == null) {
+            return false;
+        }
+
+        if (pawn.getColor() != turn) {
+            return false;
+        }
+
         return true;
     }
     public void setSelected(Pawn pawn) {
         this.selectedPawn = pawn;
 
+        // Find pawn position
         int row = 0;
         int column = 0;
 
@@ -102,7 +125,30 @@ public class Board {
             }
         }
 
-        pawnsMoves.get(row).set(column, true);
+        // Calculate pawns moves
+        this.resetPawnsMoves();
+
+        // Select pawn
+        this.pawnsMoves.get(row).set(column, CASE_MOVE.SELECTED);
+
+        // White pawns
+        if (pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
+            if (row - 1 >= 0 && column - 1 >= 0 && this.pawns.get(row - 1).get(column - 1) == null) {
+                this.pawnsMoves.get(row - 1).set(column - 1, CASE_MOVE.MOVED);
+            }
+
+            if (row - 1 >= 0 && column + 1 <= 9 && this.pawns.get(row - 1).get(column + 1) == null) {
+                this.pawnsMoves.get(row - 1).set(column + 1, CASE_MOVE.MOVED);
+            }
+        } else {
+            if (row + 1 <= 9 && column - 1 >= 0 && this.pawns.get(row + 1).get(column - 1) == null) {
+                this.pawnsMoves.get(row + 1).set(column - 1, CASE_MOVE.MOVED);
+            }
+
+            if (row + 1 <= 9 && column + 1 <= 9 && this.pawns.get(row + 1).get(column + 1) == null) {
+                this.pawnsMoves.get(row + 1).set(column + 1, CASE_MOVE.MOVED);
+            }
+        }
     }
 
     public void debugBoard() {

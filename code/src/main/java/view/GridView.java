@@ -17,9 +17,11 @@ public class GridView extends JPanel implements MouseListener {
     private BufferedImage whitePawnImg;
     private BufferedImage blackPawnImg;
     private Board board;
+    private BoardView boardView;
 
-    public GridView(Board board) throws IOException {
+    public GridView(Board board, BoardView boardView) throws IOException {
         this.board = board;
+        this.boardView = boardView;
         whitePawnImg = ImageIO.read(new File("src/main/resources/white-pawn.png"));
         blackPawnImg = ImageIO.read(new File("src/main/resources/black-pawn.png"));
 
@@ -32,6 +34,9 @@ public class GridView extends JPanel implements MouseListener {
         for (int row = 0; row < 10; row++) {
             for (int column = 0; column < 10; column++) {
                 if (board.isMovable(row, column)) {
+                    g.setColor(Color.YELLOW);
+                    g.fillRect(column * 50, row * 50, 50, 50);
+                } else if (board.isSelected(row, column)) {
                     g.setColor(Color.RED);
                     g.fillRect(column * 50, row * 50, 50, 50);
                 } else if (row % 2 == 0 && column % 2 == 0 || row % 2 != 0 && column % 2 != 0) {
@@ -59,12 +64,16 @@ public class GridView extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int row = e.getX() / 500;
-        int column = e.getY() / 500;
+        int column = e.getX() / 50;
+        int row = e.getY() / 50;
+
+        System.out.println("Clicked on " + row + " " + column);
 
         if (board.canBeSelected(board.getPawn(row, column))) {
             board.setSelected(board.getPawn(row, column));
         }
+
+        boardView.repaint();
     }
 
     @Override

@@ -32,23 +32,16 @@ public class BoardView extends JFrame {
         JPanel layout = new JPanel();
         layout.setLayout(new GridLayout(1, 1));
 
-        GridView gridView = null;
-        try {
-            gridView = new GridView(board);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        layout.add(gridView);
         playButton = new Button("Play");
         textUser1 = new TextField();
         textUser2 = new TextField();
         labelUser1 = new JLabel("Name of player 1 :");
         labelUser2 = new JLabel("Name of player 2 :");
 
-        if (false) {
+        if (true) {
             layout.setLayout(new GridLayout(1, 1));
             try {
-                layout.add(new GridView(this.board));
+                layout.add(new GridView(this.board, this));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
