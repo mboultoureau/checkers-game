@@ -93,9 +93,9 @@ public class Board {
     }
 
     public void move(int row, int column) {
-        Coordinates coordinates = this.getPawnPosition(selectedPawn);
+        Coordinates originalCoordinates = this.getPawnPosition(selectedPawn);
         this.pawns.get(row).set(column, selectedPawn);
-        this.pawns.get(coordinates.getRow()).set(coordinates.getColumn(), null);
+        this.pawns.get(originalCoordinates.getRow()).set(originalCoordinates.getColumn(), null);
 
         // Check if pawn become queen
         if (selectedPawn.getType() == Pawn.PAWN_TYPE.PAWN) {
@@ -105,6 +105,65 @@ public class Board {
             } else if (selectedPawn.getColor() == Pawn.PAWN_COLOR.BLACK && row == 9) {
                 selectedPawn.setType(Pawn.PAWN_TYPE.QUEEN);
                 turn = Pawn.PAWN_COLOR.WHITE;
+            }
+        }
+
+        // Check if pawn jumped
+        // Top left
+        System.out.println(row - originalCoordinates.getRow());
+        System.out.println(column - originalCoordinates.getColumn());
+        if (row - originalCoordinates.getRow() < 0 && column - originalCoordinates.getColumn() < 0) {
+            int i = row + 1;
+            int j = column + 1;
+
+            while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
+                if (this.pawns.get(i).get(j) != null) {
+                    this.pawns.get(i).set(j, null);
+                }
+                i++;
+                j++;
+            }
+        }
+
+        // Top right
+        if (row - originalCoordinates.getRow() < 0 && column - originalCoordinates.getColumn() > 0) {
+            int i = row + 1;
+            int j = column - 1;
+
+            while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
+                if (this.pawns.get(i).get(j) != null) {
+                    this.pawns.get(i).set(j, null);
+                }
+                i++;
+                j--;
+            }
+        }
+
+        // Bottom left
+        if (row - originalCoordinates.getRow() > 0 && column - originalCoordinates.getColumn() < 0) {
+            int i = row - 1;
+            int j = column + 1;
+
+            while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
+                if (this.pawns.get(i).get(j) != null) {
+                    this.pawns.get(i).set(j, null);
+                }
+                i--;
+                j++;
+            }
+        }
+
+        // Bottom right
+        if (row - originalCoordinates.getRow() > 0 && column - originalCoordinates.getColumn() > 0) {
+            int i = row - 1;
+            int j = column - 1;
+
+            while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
+                if (this.pawns.get(i).get(j) != null) {
+                    this.pawns.get(i).set(j, null);
+                }
+                i--;
+                j--;
             }
         }
 
@@ -159,6 +218,8 @@ public class Board {
         // Pawns
         if (pawn.getType() == Pawn.PAWN_TYPE.PAWN && pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
             // White pawns
+
+            // Free space
             if (row - 1 >= 0 && column - 1 >= 0 && this.pawns.get(row - 1).get(column - 1) == null) {
                 this.pawnsMoves.get(row - 1).set(column - 1, CASE_MOVE.MOVED);
             }
@@ -166,14 +227,34 @@ public class Board {
             if (row - 1 >= 0 && column + 1 <= 9 && this.pawns.get(row - 1).get(column + 1) == null) {
                 this.pawnsMoves.get(row - 1).set(column + 1, CASE_MOVE.MOVED);
             }
+
+            // Pawn
+            if (row - 2 >= 0 && column - 2 >= 0 && this.pawns.get(row - 1).get(column - 1) != null && this.pawns.get(row - 1).get(column - 1).getColor() == Pawn.PAWN_COLOR.BLACK  && this.pawns.get(row - 2).get(column - 2) == null) {
+                this.pawnsMoves.get(row - 2).set(column - 2, CASE_MOVE.MOVED);
+            }
+
+            if (row - 2 >= 0 && column + 2 <= 9 && this.pawns.get(row - 1).get(column + 1) != null && this.pawns.get(row - 1).get(column + 1).getColor() == Pawn.PAWN_COLOR.BLACK && this.pawns.get(row - 2).get(column + 2) == null) {
+                this.pawnsMoves.get(row - 2).set(column + 2, CASE_MOVE.MOVED);
+            }
         } else if (pawn.getType() == Pawn.PAWN_TYPE.PAWN && pawn.getColor() == Pawn.PAWN_COLOR.BLACK) {
             // Black pawns
+
+            // Free space
             if (row + 1 <= 9 && column - 1 >= 0 && this.pawns.get(row + 1).get(column - 1) == null) {
                 this.pawnsMoves.get(row + 1).set(column - 1, CASE_MOVE.MOVED);
             }
 
             if (row + 1 <= 9 && column + 1 <= 9 && this.pawns.get(row + 1).get(column + 1) == null) {
                 this.pawnsMoves.get(row + 1).set(column + 1, CASE_MOVE.MOVED);
+            }
+
+            // Pawn
+            if (row + 2 <= 9 && column - 2 >= 0 && this.pawns.get(row + 1).get(column - 1) != null && this.pawns.get(row + 1).get(column - 1).getColor() == Pawn.PAWN_COLOR.WHITE && this.pawns.get(row + 2).get(column - 2) == null) {
+                this.pawnsMoves.get(row + 2).set(column - 2, CASE_MOVE.MOVED);
+            }
+
+            if (row + 2 <= 9 && column + 2 <= 9 && this.pawns.get(row + 1).get(column + 1) != null && this.pawns.get(row + 1).get(column + 1).getColor() == Pawn.PAWN_COLOR.WHITE && this.pawns.get(row + 2).get(column + 2) == null) {
+                this.pawnsMoves.get(row + 2).set(column + 2, CASE_MOVE.MOVED);
             }
         } else if (pawn.getType() == Pawn.PAWN_TYPE.QUEEN) {
             // Check top left
@@ -232,6 +313,10 @@ public class Board {
                     newRow.add(new Pawn(Pawn.PAWN_COLOR.WHITE, Pawn.PAWN_TYPE.PAWN));
                 } else if (column == 7 && row == 8) {
                     newRow.add(new Pawn(Pawn.PAWN_COLOR.BLACK, Pawn.PAWN_TYPE.PAWN));
+                } else if (column == 6 && row == 4) {
+                    newRow.add(new Pawn(Pawn.PAWN_COLOR.BLACK, Pawn.PAWN_TYPE.PAWN));
+                } else if (column == 7 && row == 5) {
+                    newRow.add(new Pawn(Pawn.PAWN_COLOR.WHITE, Pawn.PAWN_TYPE.PAWN));
                 } else {
                     newRow.add(null);
                 }
