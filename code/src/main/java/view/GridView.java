@@ -16,6 +16,8 @@ public class GridView extends JPanel implements MouseListener {
 
     private BufferedImage whitePawnImg;
     private BufferedImage blackPawnImg;
+    private BufferedImage whiteQueenImg;
+    private BufferedImage blackQueenImg;
     private Board board;
     private BoardView boardView;
 
@@ -24,6 +26,8 @@ public class GridView extends JPanel implements MouseListener {
         this.boardView = boardView;
         whitePawnImg = ImageIO.read(new File("src/main/resources/white-pawn.png"));
         blackPawnImg = ImageIO.read(new File("src/main/resources/black-pawn.png"));
+        whiteQueenImg = ImageIO.read(new File("src/main/resources/white-queen.png"));
+        blackQueenImg = ImageIO.read(new File("src/main/resources/black-queen.png"));
 
         this.addMouseListener(this);
     }
@@ -52,10 +56,20 @@ public class GridView extends JPanel implements MouseListener {
         for (int row = 0; row < 10; row++) {
             for (int column = 0; column < 10; column++) {
                 if (board.getPawn(row, column) != null) {
-                    if (board.getPawn(row, column).getColor() == Pawn.PAWN_COLOR.WHITE) {
-                        g.drawImage(whitePawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                    Pawn pawn = board.getPawn(row, column);
+
+                    if (pawn.getType() == Pawn.PAWN_TYPE.PAWN) {
+                        if (pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
+                            g.drawImage(whitePawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                        } else {
+                            g.drawImage(blackPawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                        }
                     } else {
-                        g.drawImage(blackPawnImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                        if (pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
+                            g.drawImage(whiteQueenImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                        } else {
+                            g.drawImage(blackQueenImg, column * 50, row * 50, column * 50 + 50, row * 50 + 50, 0, 0, 100, 100, null);
+                        }
                     }
                 }
             }
@@ -69,8 +83,15 @@ public class GridView extends JPanel implements MouseListener {
 
         System.out.println("Clicked on " + row + " " + column);
 
-        if (board.canBeSelected(board.getPawn(row, column))) {
-            board.setSelected(board.getPawn(row, column));
+        switch (board.getCaseType(row, column)) {
+            case PAWN:
+                if (board.canBeSelected(board.getPawn(row, column))) {
+                    board.setSelected(board.getPawn(row, column));
+                }
+                break;
+            case MOVEMENT:
+                board.move(row, column);
+                break;
         }
 
         boardView.repaint();

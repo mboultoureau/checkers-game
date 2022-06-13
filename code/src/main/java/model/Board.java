@@ -8,6 +8,7 @@ public class Board {
     public static int COLUMNS = 10;
     public static int ROWS = 10;
     public enum CASE_MOVE { NONE, SELECTED, MOVED };
+    public enum CASE_TYPE { NONE, PAWN, MOVEMENT };
     private List<List<Pawn>> pawns;
     private List<List<CASE_MOVE>> pawnsMoves;
     private Pawn selectedPawn;
@@ -16,7 +17,8 @@ public class Board {
     public Board() {
         this.pawns = new ArrayList<List<Pawn>>(ROWS);
         this.pawnsMoves = new ArrayList<List<CASE_MOVE>>(ROWS);
-        this.initBoard();
+        // this.initBoard();
+        this.customBoard();
         this.resetPawnsMoves();
         this.turn = Pawn.PAWN_COLOR.WHITE;
     }
@@ -78,6 +80,37 @@ public class Board {
         }
     }
 
+    public CASE_TYPE getCaseType(int row, int column) {
+        if (this.pawns.get(row).get(column) != null) {
+            return CASE_TYPE.PAWN;
+        }
+
+        if (this.pawnsMoves.get(row).get(column) == CASE_MOVE.MOVED) {
+            return CASE_TYPE.MOVEMENT;
+        }
+
+        return CASE_TYPE.NONE;
+    }
+
+    public void move(int row, int column) {
+        Coordinates coordinates = this.getPawnPosition(selectedPawn);
+        this.pawns.get(row).set(column, selectedPawn);
+        this.pawns.get(coordinates.getRow()).set(coordinates.getColumn(), null);
+
+        // Check if pawn become queen
+        if (selectedPawn.getType() == Pawn.PAWN_TYPE.PAWN) {
+            if (selectedPawn.getColor() == Pawn.PAWN_COLOR.WHITE && row == 0) {
+                selectedPawn.setType(Pawn.PAWN_TYPE.QUEEN);
+                turn = Pawn.PAWN_COLOR.BLACK;
+            } else if (selectedPawn.getColor() == Pawn.PAWN_COLOR.BLACK && row == 9) {
+                selectedPawn.setType(Pawn.PAWN_TYPE.QUEEN);
+                turn = Pawn.PAWN_COLOR.WHITE;
+            }
+        }
+
+        this.resetPawnsMoves();
+    }
+
     public void resetPawnsMoves() {
         for (int row = 0; row < ROWS; row++) {
             for (int column = 0; column < COLUMNS; column++) {
@@ -113,17 +146,9 @@ public class Board {
         this.selectedPawn = pawn;
 
         // Find pawn position
-        int row = 0;
-        int column = 0;
-
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
-                if (this.pawns.get(i).get(j) == pawn) {
-                    row = i;
-                    column = j;
-                }
-            }
-        }
+        Coordinates pawnPosition = getPawnPosition(pawn);
+        int row = pawnPosition.getRow();
+        int column = pawnPosition.getColumn();
 
         // Calculate pawns moves
         this.resetPawnsMoves();
@@ -131,8 +156,9 @@ public class Board {
         // Select pawn
         this.pawnsMoves.get(row).set(column, CASE_MOVE.SELECTED);
 
-        // White pawns
-        if (pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
+        // Pawns
+        if (pawn.getType() == Pawn.PAWN_TYPE.PAWN && pawn.getColor() == Pawn.PAWN_COLOR.WHITE) {
+            // White pawns
             if (row - 1 >= 0 && column - 1 >= 0 && this.pawns.get(row - 1).get(column - 1) == null) {
                 this.pawnsMoves.get(row - 1).set(column - 1, CASE_MOVE.MOVED);
             }
@@ -140,7 +166,8 @@ public class Board {
             if (row - 1 >= 0 && column + 1 <= 9 && this.pawns.get(row - 1).get(column + 1) == null) {
                 this.pawnsMoves.get(row - 1).set(column + 1, CASE_MOVE.MOVED);
             }
-        } else {
+        } else if (pawn.getType() == Pawn.PAWN_TYPE.PAWN && pawn.getColor() == Pawn.PAWN_COLOR.BLACK) {
+            // Black pawns
             if (row + 1 <= 9 && column - 1 >= 0 && this.pawns.get(row + 1).get(column - 1) == null) {
                 this.pawnsMoves.get(row + 1).set(column - 1, CASE_MOVE.MOVED);
             }
@@ -148,7 +175,95 @@ public class Board {
             if (row + 1 <= 9 && column + 1 <= 9 && this.pawns.get(row + 1).get(column + 1) == null) {
                 this.pawnsMoves.get(row + 1).set(column + 1, CASE_MOVE.MOVED);
             }
+        } else if (pawn.getType() == Pawn.PAWN_TYPE.QUEEN) {
+            // Check top left
+            int i = row;
+            int j = column;
+
+            while (i >= 0 && j >= 0) {
+                this.pawnsMoves.get(i).set(j, CASE_MOVE.MOVED);
+
+                i--;
+                j--;
+            }
+
+            // Check top right
+            i = row;
+            j = column;
+
+            while (i >= 0 && j <= 9) {
+                this.pawnsMoves.get(i).set(j, CASE_MOVE.MOVED);
+
+                i--;
+                j++;
+            }
+
+            // Check bottom left
+            i = row;
+            j = column;
+
+            while (i <= 9 && j >= 0) {
+                this.pawnsMoves.get(i).set(j, CASE_MOVE.MOVED);
+
+                i++;
+                j--;
+            }
+
+            // Check bottom right
+            i = row;
+            j = column;
+
+            while (i <= 9 && j <= 9) {
+                this.pawnsMoves.get(i).set(j, CASE_MOVE.MOVED);
+
+                i++;
+                j++;
+            }
         }
+    }
+
+    public void customBoard() {
+        // Initial creation of the game board
+        for (int row = 0; row < ROWS; row++) {
+            ArrayList<Pawn> newRow = new ArrayList<Pawn>(COLUMNS);
+
+            for (int column = 0; column < COLUMNS; column++) {
+                if (column == 3 && row == 1) {
+                    newRow.add(new Pawn(Pawn.PAWN_COLOR.WHITE, Pawn.PAWN_TYPE.PAWN));
+                } else if (column == 7 && row == 8) {
+                    newRow.add(new Pawn(Pawn.PAWN_COLOR.BLACK, Pawn.PAWN_TYPE.PAWN));
+                } else {
+                    newRow.add(null);
+                }
+            }
+
+            this.pawns.add(newRow);
+        }
+
+        // Initialization of pawns moves
+        for (int row = 0; row < ROWS; row++) {
+            ArrayList<CASE_MOVE> newRow = new ArrayList<CASE_MOVE>(COLUMNS);
+            for (int column = 0; column < COLUMNS; column++) {
+                newRow.add(CASE_MOVE.NONE);
+            }
+            this.pawnsMoves.add(newRow);
+        }
+    }
+
+    public Coordinates getPawnPosition(Pawn pawn) {
+        Coordinates coordinates = new Coordinates();
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if (this.pawns.get(i).get(j) == pawn) {
+                    coordinates.setRow(i);
+                    coordinates.setColumn(j);
+                    return coordinates;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void debugBoard() {
