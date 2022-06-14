@@ -17,8 +17,8 @@ public class Board {
     public Board() {
         this.pawns = new ArrayList<List<Pawn>>(ROWS);
         this.pawnsMoves = new ArrayList<List<CASE_MOVE>>(ROWS);
-        // this.initBoard();
-        this.customBoard();
+        this.initBoard();
+        // this.customBoard();
         this.resetPawnsMoves();
         this.turn = Pawn.PAWN_COLOR.WHITE;
     }

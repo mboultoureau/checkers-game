@@ -4,9 +4,9 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class BoardView extends JFrame {
 
@@ -17,6 +17,8 @@ public class BoardView extends JFrame {
     private TextField textUser2;
     private JLabel labelUser1;
     private JLabel labelUser2;
+    private JButton reversedButton;
+    protected GridView gridView;
 
     public BoardView(Board board) {
         this.board = board;
@@ -31,20 +33,27 @@ public class BoardView extends JFrame {
     public void display() {
         JPanel layout = new JPanel();
         layout.setLayout(new GridLayout(1, 1));
+        try {
+            this.gridView = new GridView(this.board, this);
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(-1);
+        }
 
         playButton = new Button("Play");
+        reversedButton = new JButton("Reverse");
         textUser1 = new TextField();
         textUser2 = new TextField();
         labelUser1 = new JLabel("Name of player 1 :");
         labelUser2 = new JLabel("Name of player 2 :");
 
         if (true) {
-            layout.setLayout(new GridLayout(1, 1));
-            try {
-                layout.add(new GridView(this.board, this));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            reversedButton.addActionListener(new ButtonListener(this.gridView));
+            reversedButton.setMaximumSize(new Dimension(100, 100));
+
+            layout.setLayout(new BorderLayout(2, 2));
+            layout.add(this.gridView, BorderLayout.CENTER);
+            layout.add(reversedButton, BorderLayout.EAST);
         } else {
             this.setSize(450, 300);
             this.setResizable(true);
@@ -79,5 +88,26 @@ public class BoardView extends JFrame {
         }
 
         this.setContentPane(layout);
+    }
+
+    public class ButtonListener implements ActionListener {
+
+        private Object parameter;
+
+        public ButtonListener() {
+            this.parameter = null;
+        }
+
+        public ButtonListener(Object parameter) {
+            this.parameter = parameter;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == reversedButton && this.parameter instanceof GridView) {
+                GridView gridView = (GridView) this.parameter;
+                gridView.reverse();
+            }
+        }
     }
 }
