@@ -12,7 +12,8 @@ public class BoardView extends JFrame {
 
     private JLabel background;
     private Board board;
-    private Button playButton;
+    private JButton playButton;
+    private JButton restartButton;
     private TextField textUser1;
     private TextField textUser2;
     private JLabel labelUser1;
@@ -27,7 +28,10 @@ public class BoardView extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.display();
-        this.setVisible(true);
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     public void display() {
@@ -40,7 +44,8 @@ public class BoardView extends JFrame {
             System.exit(-1);
         }
 
-        playButton = new Button("Play");
+        restartButton = new JButton("Restart");
+        playButton = new JButton("Play");
         reversedButton = new JButton("Reverse");
         textUser1 = new TextField();
         textUser2 = new TextField();
@@ -48,12 +53,22 @@ public class BoardView extends JFrame {
         labelUser2 = new JLabel("Name of player 2 :");
 
         if (true) {
+            // Sidebar
+            JPanel sidebar = new JPanel();
+            sidebar.setLayout(new GridLayout(2, 1));
+
             reversedButton.addActionListener(new ButtonListener(this.gridView));
             reversedButton.setMaximumSize(new Dimension(100, 100));
 
+            restartButton.addActionListener(new ButtonListener(this));
+            restartButton.setMaximumSize(new Dimension(100, 100));
+
+            sidebar.add(reversedButton);
+            sidebar.add(restartButton);
+
             layout.setLayout(new BorderLayout(2, 2));
             layout.add(this.gridView, BorderLayout.CENTER);
-            layout.add(reversedButton, BorderLayout.EAST);
+            layout.add(sidebar, BorderLayout.EAST);
         } else {
             this.setSize(450, 300);
             this.setResizable(true);
@@ -107,6 +122,11 @@ public class BoardView extends JFrame {
             if (e.getSource() == reversedButton && this.parameter instanceof GridView) {
                 GridView gridView = (GridView) this.parameter;
                 gridView.reverse();
+            } else if (e.getSource() == restartButton && this.parameter instanceof BoardView) {
+                BoardView boardView = (BoardView) this.parameter;
+                boardView.getBoard().reset();
+                boardView.revalidate();
+                boardView.repaint();
             }
         }
     }

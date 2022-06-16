@@ -5,7 +5,7 @@ import view.BoardView;
 
 public class GameController {
 
-    private Board board;
+    private final Board board;
 
     public GameController() {
         this.board = new Board();
@@ -13,6 +13,7 @@ public class GameController {
 
     public void run() {
         BoardView boardView = new BoardView(board);
+        boardView.setVisible(true);
     }
 
 }

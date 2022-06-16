@@ -7,20 +7,25 @@ public class Board {
 
     public static int COLUMNS = 10;
     public static int ROWS = 10;
-    public enum CASE_MOVE { NONE, SELECTED, MOVED };
-    public enum CASE_TYPE { NONE, PAWN, MOVEMENT };
-    private List<List<Pawn>> pawns;
-    private List<List<CASE_MOVE>> pawnsMoves;
+    public enum CASE_MOVE { NONE, SELECTED, MOVED }
+    public enum CASE_TYPE { NONE, PAWN, MOVEMENT }
+    private final List<List<Pawn>> pawns;
+    private final List<List<CASE_MOVE>> pawnsMoves;
     private Pawn selectedPawn;
     private Pawn.PAWN_COLOR turn;
 
     public Board() {
-        this.pawns = new ArrayList<List<Pawn>>(ROWS);
-        this.pawnsMoves = new ArrayList<List<CASE_MOVE>>(ROWS);
+        this.pawns = new ArrayList<>(ROWS);
+        this.pawnsMoves = new ArrayList<>(ROWS);
         this.initBoard();
         // this.customBoard();
         this.resetPawnsMoves();
         this.turn = Pawn.PAWN_COLOR.WHITE;
+    }
+
+    public void reset() {
+        this.clearBoard();
+        this.initBoard();
     }
 
     public void clearBoard() {
@@ -303,7 +308,7 @@ public class Board {
         }
     }
 
-    public void customBoard() {
+    /* public void customBoard() {
         // Initial creation of the game board
         for (int row = 0; row < ROWS; row++) {
             ArrayList<Pawn> newRow = new ArrayList<Pawn>(COLUMNS);
@@ -333,7 +338,7 @@ public class Board {
             }
             this.pawnsMoves.add(newRow);
         }
-    }
+    }*/
 
     public Coordinates getPawnPosition(Pawn pawn) {
         Coordinates coordinates = new Coordinates();
