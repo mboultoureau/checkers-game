@@ -115,8 +115,6 @@ public class Board {
 
         // Check if pawn jumped
         // Top left
-        System.out.println(row - originalCoordinates.getRow());
-        System.out.println(column - originalCoordinates.getColumn());
         if (row - originalCoordinates.getRow() < 0 && column - originalCoordinates.getColumn() < 0) {
             int i = row + 1;
             int j = column + 1;
@@ -170,6 +168,13 @@ public class Board {
                 i--;
                 j--;
             }
+        }
+
+        // Temp change turn
+        if (turn == Pawn.PAWN_COLOR.WHITE) {
+            turn = Pawn.PAWN_COLOR.BLACK;
+        } else {
+            turn = Pawn.PAWN_COLOR.WHITE;
         }
 
         this.resetPawnsMoves();

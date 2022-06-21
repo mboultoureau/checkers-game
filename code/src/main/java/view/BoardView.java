@@ -14,17 +14,27 @@ public class BoardView extends JFrame {
     private Board board;
     private JButton playButton;
     private JButton restartButton;
+    private JButton menuButton;
     private TextField textUser1;
     private TextField textUser2;
     private JLabel labelUser1;
     private JLabel labelUser2;
     private JButton reversedButton;
     protected GridView gridView;
+    private boolean isPlaying;
 
     public BoardView(Board board) {
         this.board = board;
+        this.isPlaying = false;
+
+        try {
+            this.gridView = new GridView(this.board, this);
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(-1);
+        }
+
         this.setTitle("Checkers Game");
-        this.setSize(700, 530);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.display();
@@ -37,34 +47,32 @@ public class BoardView extends JFrame {
     public void display() {
         JPanel layout = new JPanel();
         layout.setLayout(new GridLayout(1, 1));
-        try {
-            this.gridView = new GridView(this.board, this);
-        } catch (IOException e) {
-            System.err.println("Error: " + e.getMessage());
-            System.exit(-1);
-        }
 
         restartButton = new JButton("Restart");
         playButton = new JButton("Play");
         reversedButton = new JButton("Reverse");
+        menuButton = new JButton("Back to menu");
         textUser1 = new TextField();
         textUser2 = new TextField();
         labelUser1 = new JLabel("Name of player 1 :");
         labelUser2 = new JLabel("Name of player 2 :");
 
-        if (true) {
+        if (isPlaying) {
+            this.setSize(700, 530);
+
             // Sidebar
             JPanel sidebar = new JPanel();
-            sidebar.setLayout(new GridLayout(2, 1));
+            sidebar.setLayout(new GridLayout(3, 1));
 
-            reversedButton.addActionListener(new ButtonListener(this.gridView));
-            reversedButton.setMaximumSize(new Dimension(100, 100));
+            reversedButton.addActionListener(new ButtonListener(this));
 
             restartButton.addActionListener(new ButtonListener(this));
-            restartButton.setMaximumSize(new Dimension(100, 100));
+
+            menuButton.addActionListener(new ButtonListener(this));
 
             sidebar.add(reversedButton);
             sidebar.add(restartButton);
+            sidebar.add(menuButton);
 
             layout.setLayout(new BorderLayout(2, 2));
             layout.add(this.gridView, BorderLayout.CENTER);
@@ -74,59 +82,77 @@ public class BoardView extends JFrame {
             this.setResizable(true);
             layout.setLayout(null);
 
-            layout.add(playButton);
             playButton.setSize(150, 60);
             playButton.setLocation(50, 200);
+            playButton.addActionListener(new ButtonListener(this));
+            layout.add(playButton);
 
-            layout.add(labelUser1);
             labelUser1.setSize(180, 40);
             labelUser1.setLocation(20, 110);
             labelUser1.setForeground(Color.WHITE);
             labelUser1.setFont(new Font("sans-serif", Font.BOLD, 18));
+            layout.add(labelUser1);
 
-            layout.add(labelUser2);
             labelUser2.setSize(180, 40);
             labelUser2.setLocation(20, 140);
             labelUser2.setForeground(Color.WHITE);
             labelUser2.setFont(new Font("sans-serif", Font.BOLD, 18));
+            layout.add(labelUser2);
 
-            layout.add(textUser1);
             textUser1.setSize(150, 25);
             textUser1.setLocation(200, 120);
-
+            layout.add(textUser1);
 
             ImageIcon imageIcon = new ImageIcon("src/main/resources/homepage.png");
             JLabel label = new JLabel(imageIcon);
-            layout.add(label);
             label.setSize(500, 500);
             label.setLocation(-25, -100);
+            layout.add(label);
         }
 
         this.setContentPane(layout);
     }
 
+    public GridView getGridView() {
+        return gridView;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
+
     public class ButtonListener implements ActionListener {
 
-        private Object parameter;
+        private BoardView boardView;
 
-        public ButtonListener() {
-            this.parameter = null;
-        }
-
-        public ButtonListener(Object parameter) {
-            this.parameter = parameter;
+        public ButtonListener(BoardView boardView) {
+            this.boardView = boardView;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == reversedButton && this.parameter instanceof GridView) {
-                GridView gridView = (GridView) this.parameter;
-                gridView.reverse();
-            } else if (e.getSource() == restartButton && this.parameter instanceof BoardView) {
-                BoardView boardView = (BoardView) this.parameter;
-                boardView.getBoard().reset();
-                boardView.revalidate();
-                boardView.repaint();
+            if (this.boardView == null) {
+                return;
+            }
+
+            if (e.getSource() == reversedButton) {
+                this.boardView.getGridView().reverse();
+            } else if (e.getSource() == restartButton) {
+                this.boardView.getBoard().reset();
+                this.boardView.revalidate();
+                this.boardView.repaint();
+            } else if (e.getSource() == playButton) {
+                this.boardView.setPlaying(true);
+                this.boardView.getBoard().reset();
+                this.boardView.display();
+                this.boardView.revalidate();
+                this.boardView.repaint();
+            } else if (e.getSource() == menuButton) {
+                this.boardView.setPlaying(false);
+                this.boardView.getBoard().reset();
+                this.boardView.display();
+                this.boardView.revalidate();
+                this.boardView.repaint();
             }
         }
     }
