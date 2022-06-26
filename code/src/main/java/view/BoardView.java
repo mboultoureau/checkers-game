@@ -15,13 +15,16 @@ public class BoardView extends JFrame {
     private JButton playButton;
     private JButton restartButton;
     private JButton menuButton;
-    private TextField textUser1;
-    private TextField textUser2;
+    private TextField textUser1 = new TextField();
+    private TextField textUser2 = new TextField();
     private JLabel labelUser1;
     private JLabel labelUser2;
     private JButton reversedButton;
     protected GridView gridView;
     private boolean isPlaying;
+    private JLabel user1Name;
+    private JLabel user2Name;
+    private JLabel userTurn;
 
     public BoardView(Board board) {
         this.board = board;
@@ -52,17 +55,15 @@ public class BoardView extends JFrame {
         playButton = new JButton("Play");
         reversedButton = new JButton("Reverse");
         menuButton = new JButton("Back to menu");
-        textUser1 = new TextField();
-        textUser2 = new TextField();
         labelUser1 = new JLabel("Name of player 1 :");
         labelUser2 = new JLabel("Name of player 2 :");
 
         if (isPlaying) {
-            this.setSize(700, 530);
+            this.setSize(750, 530);
 
             // Sidebar
             JPanel sidebar = new JPanel();
-            sidebar.setLayout(new GridLayout(3, 1));
+            sidebar.setLayout(new GridLayout(3, 2));
 
             reversedButton.addActionListener(new ButtonListener(this));
 
@@ -70,9 +71,13 @@ public class BoardView extends JFrame {
 
             menuButton.addActionListener(new ButtonListener(this));
 
+            sidebar.add(userTurn);
             sidebar.add(reversedButton);
+            sidebar.add(user1Name);
             sidebar.add(restartButton);
+            sidebar.add(user2Name);
             sidebar.add(menuButton);
+
 
             layout.setLayout(new BorderLayout(2, 2));
             layout.add(this.gridView, BorderLayout.CENTER);
@@ -83,7 +88,7 @@ public class BoardView extends JFrame {
             layout.setLayout(null);
 
             playButton.setSize(150, 60);
-            playButton.setLocation(50, 200);
+            playButton.setLocation(150, 200);
             playButton.addActionListener(new ButtonListener(this));
             layout.add(playButton);
 
@@ -102,6 +107,10 @@ public class BoardView extends JFrame {
             textUser1.setSize(150, 25);
             textUser1.setLocation(200, 120);
             layout.add(textUser1);
+
+            textUser2.setSize(150, 25);
+            textUser2.setLocation(200, 150);
+            layout.add(textUser2);
 
             ImageIcon imageIcon = new ImageIcon("src/main/resources/homepage.png");
             JLabel label = new JLabel(imageIcon);
@@ -126,6 +135,10 @@ public class BoardView extends JFrame {
         private BoardView boardView;
 
         public ButtonListener(BoardView boardView) {
+            user1Name = new JLabel("<html>" + textUser1.getText() + "<br>Checkers remaining : 12</html>");
+            user2Name = new JLabel("<html>" + textUser2.getText() + "<br>Checkers remaining : 15</html>");
+            userTurn = new JLabel( textUser2.getText() + " turn");
+            userTurn.setForeground(Color.red);
             this.boardView = boardView;
         }
 
