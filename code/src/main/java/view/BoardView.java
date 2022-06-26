@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.Pawn;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,8 @@ public class BoardView extends JFrame {
     private JLabel user1Name;
     private JLabel user2Name;
     private JLabel userTurn;
+    private int user1Checkers = 20;
+    private int user2Checkers = 20;
 
     public BoardView(Board board) {
         this.board = board;
@@ -59,7 +62,7 @@ public class BoardView extends JFrame {
         labelUser2 = new JLabel("Name of player 2 :");
 
         if (isPlaying) {
-            this.setSize(750, 530);
+            this.setSize(810, 530);
 
             // Sidebar
             JPanel sidebar = new JPanel();
@@ -129,14 +132,36 @@ public class BoardView extends JFrame {
     public void setPlaying(boolean playing) {
         isPlaying = playing;
     }
+    public void setTurn(Pawn.PAWN_COLOR color){
+        if (color == Pawn.PAWN_COLOR.BLACK){
+            userTurn.setText(textUser1.getText() + " turn");
+            userTurn.setForeground(Color.black);
+        } else {
+            userTurn.setText(textUser2.getText() + " turn");
+            userTurn.setForeground(Color.red);
+        }
+    }
+
+    public void setCheckersLeft(Pawn.PAWN_COLOR color){
+        if (color == Pawn.PAWN_COLOR.BLACK){
+            user2Checkers--;
+        } else {
+            user1Checkers--;
+        }
+        user1Name.setText("<html>" + textUser1.getText() + "<br>Checkers remaining : " + user1Checkers + "</html>");
+        user2Name.setText("<html>" + textUser2.getText() + "<br>Checkers remaining : " + user2Checkers + "</html>");
+    }
+
 
     public class ButtonListener implements ActionListener {
 
         private BoardView boardView;
 
         public ButtonListener(BoardView boardView) {
-            user1Name = new JLabel("<html>" + textUser1.getText() + "<br>Checkers remaining : 12</html>");
-            user2Name = new JLabel("<html>" + textUser2.getText() + "<br>Checkers remaining : 15</html>");
+            user1Name = new JLabel("<html>" + textUser1.getText() + "<br>Checkers remaining : " + user1Checkers + "</html>");
+            user1Name.setForeground(Color.black);
+            user2Name = new JLabel("<html>" + textUser2.getText() + "<br>Checkers remaining : " + user2Checkers + "</html>");
+            user2Name.setForeground(Color.red);
             userTurn = new JLabel( textUser2.getText() + " turn");
             userTurn.setForeground(Color.red);
             this.boardView = boardView;
@@ -151,6 +176,10 @@ public class BoardView extends JFrame {
             if (e.getSource() == reversedButton) {
                 this.boardView.getGridView().reverse();
             } else if (e.getSource() == restartButton) {
+                user1Checkers = 20;
+                user2Checkers = 20;
+                user1Name.setText("<html>" + textUser1.getText() + "<br>Checkers remaining : " + user1Checkers + "</html>");
+                user2Name.setText("<html>" + textUser2.getText() + "<br>Checkers remaining : " + user2Checkers + "</html>");
                 this.boardView.getBoard().reset();
                 this.boardView.revalidate();
                 this.boardView.repaint();
@@ -161,6 +190,8 @@ public class BoardView extends JFrame {
                 this.boardView.revalidate();
                 this.boardView.repaint();
             } else if (e.getSource() == menuButton) {
+                user1Checkers = 20;
+                user2Checkers = 20;
                 this.boardView.setPlaying(false);
                 this.boardView.getBoard().reset();
                 this.boardView.display();
