@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,21 +88,25 @@ public class BoardView extends JFrame {
             playButton.addActionListener(new ButtonListener(this));
             layout.add(playButton);
 
-            labelUser1.setSize(180, 40);
+            labelUser1.setSize(200, 40);
             labelUser1.setLocation(20, 110);
             labelUser1.setForeground(Color.WHITE);
             labelUser1.setFont(new Font("sans-serif", Font.BOLD, 18));
             layout.add(labelUser1);
 
-            labelUser2.setSize(180, 40);
+            labelUser2.setSize(200, 40);
             labelUser2.setLocation(20, 140);
             labelUser2.setForeground(Color.WHITE);
             labelUser2.setFont(new Font("sans-serif", Font.BOLD, 18));
             layout.add(labelUser2);
 
-            textUser1.setSize(150, 25);
-            textUser1.setLocation(200, 120);
+            textUser1.setSize(180, 25);
+            textUser1.setLocation(220, 115);
             layout.add(textUser1);
+
+            textUser2.setSize(180, 25);
+            textUser2.setLocation(220, 145);
+            layout.add(textUser2);
 
             ImageIcon imageIcon = new ImageIcon("src/main/resources/homepage.png");
             JLabel label = new JLabel(imageIcon);
@@ -111,6 +116,14 @@ public class BoardView extends JFrame {
         }
 
         this.setContentPane(layout);
+    }
+
+    public String getPlayer1Name() {
+        return this.textUser1.getText();
+    }
+
+    public String getPlayer2Name() {
+        return this.textUser1.getText();
     }
 
     public GridView getGridView() {
@@ -142,6 +155,15 @@ public class BoardView extends JFrame {
                 this.boardView.revalidate();
                 this.boardView.repaint();
             } else if (e.getSource() == playButton) {
+                Player player1 = new Player(this.boardView.getPlayer1Name());
+                Player player2 = new Player(this.boardView.getPlayer2Name());
+
+
+
+
+
+
+
                 this.boardView.setPlaying(true);
                 this.boardView.getBoard().reset();
                 this.boardView.display();
