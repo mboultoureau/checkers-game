@@ -1,5 +1,8 @@
 package model;
 
+import view.BoardView;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class Board {
     private final List<List<CASE_MOVE>> pawnsMoves;
     private Pawn selectedPawn;
     private Pawn.PAWN_COLOR turn;
+    public BoardView boardView;
 
     public Board() {
         this.pawns = new ArrayList<>(ROWS);
@@ -21,6 +25,10 @@ public class Board {
         // this.customBoard();
         this.resetPawnsMoves();
         this.turn = Pawn.PAWN_COLOR.WHITE;
+    }
+
+    public void setBoardView(BoardView boardView){
+        this.boardView = boardView;
     }
 
     public void reset() {
@@ -122,6 +130,7 @@ public class Board {
             while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
                 if (this.pawns.get(i).get(j) != null) {
                     this.pawns.get(i).set(j, null);
+                    boardView.setCheckersLeft(turn);
                 }
                 i++;
                 j++;
@@ -136,6 +145,7 @@ public class Board {
             while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
                 if (this.pawns.get(i).get(j) != null) {
                     this.pawns.get(i).set(j, null);
+                    boardView.setCheckersLeft(turn);
                 }
                 i++;
                 j--;
@@ -150,6 +160,7 @@ public class Board {
             while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
                 if (this.pawns.get(i).get(j) != null) {
                     this.pawns.get(i).set(j, null);
+                    boardView.setCheckersLeft(turn);
                 }
                 i--;
                 j++;
@@ -164,6 +175,7 @@ public class Board {
             while (i != originalCoordinates.getRow() || j != originalCoordinates.getColumn()) {
                 if (this.pawns.get(i).get(j) != null) {
                     this.pawns.get(i).set(j, null);
+                    boardView.setCheckersLeft(turn);
                 }
                 i--;
                 j--;
@@ -176,6 +188,7 @@ public class Board {
         } else {
             turn = Pawn.PAWN_COLOR.WHITE;
         }
+        boardView.setTurn(turn);
 
         this.resetPawnsMoves();
     }
@@ -186,6 +199,10 @@ public class Board {
                 this.pawnsMoves.get(row).set(column, CASE_MOVE.NONE);
             }
         }
+    }
+
+    public Pawn.PAWN_COLOR getTurn(){
+        return this.turn;
     }
 
     public Pawn getPawn(int row, int column) {

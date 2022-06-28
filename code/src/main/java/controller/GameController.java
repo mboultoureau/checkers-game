@@ -14,6 +14,7 @@ public class GameController {
     public void run() {
         BoardView boardView = new BoardView(board);
         boardView.setVisible(true);
+        board.setBoardView(boardView);
     }
 
 }
