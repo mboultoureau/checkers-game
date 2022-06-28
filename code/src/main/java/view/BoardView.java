@@ -93,6 +93,7 @@ public class BoardView extends JFrame {
 
             playButton.setSize(150, 60);
             playButton.setLocation(150, 200);
+            playButton.setBackground(Color.WHITE);
             playButton.addActionListener(new ButtonListener(this));
             layout.add(playButton);
 
