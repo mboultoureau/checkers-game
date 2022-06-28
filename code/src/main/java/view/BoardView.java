@@ -205,7 +205,7 @@ public class BoardView extends JFrame {
 
 
                 this.boardView.setPlaying(true);
-                this.boardView.getBoard().reset();
+                // this.boardView.getBoard().reset();
                 this.boardView.display();
                 this.boardView.revalidate();
                 this.boardView.repaint();
