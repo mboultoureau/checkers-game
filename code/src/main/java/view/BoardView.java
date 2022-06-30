@@ -177,21 +177,6 @@ public class BoardView extends JFrame {
                 this.boardView.getBoard().reset();
                 this.boardView.revalidate();
                 this.boardView.repaint();
-            } else if (e.getSource() == playButton) {
-                Player player1 = new Player(this.boardView.getPlayer1Name());
-                Player player2 = new Player(this.boardView.getPlayer2Name());
-
-
-
-
-
-
-
-                this.boardView.setPlaying(true);
-                // this.boardView.getBoard().reset();
-                this.boardView.display();
-                this.boardView.revalidate();
-                this.boardView.repaint();
             } else if (e.getSource() == menuButton) {
                 user1Checkers = 20;
                 user2Checkers = 20;
