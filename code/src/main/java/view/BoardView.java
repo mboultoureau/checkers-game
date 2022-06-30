@@ -63,7 +63,7 @@ public class BoardView extends JFrame {
         menuButton = new JButton("Back to menu");
 
         if (isPlaying) {
-            this.setSize(810, 530);
+            this.setSize(900, 530);
 
             // Sidebar
             JPanel sidebar = new JPanel();
