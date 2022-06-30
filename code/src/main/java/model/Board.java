@@ -22,8 +22,8 @@ public class Board {
     public Board() {
         this.pawns = new ArrayList<>(ROWS);
         this.pawnsMoves = new ArrayList<>(ROWS);
-        // this.initBoard();
-        this.customBoard();
+        this.initBoard();
+        // this.customBoard();
         this.resetPawnsMoves();
         this.turn = Pawn.PAWN_COLOR.WHITE;
         this.forceSelected = false;
@@ -455,5 +455,9 @@ public class Board {
 
             System.out.print("\n");
         }
+    }
+
+    public void update() {
+
     }
 }

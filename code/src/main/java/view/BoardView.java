@@ -1,6 +1,8 @@
 package view;
 
+import controller.GameController;
 import model.Board;
+import model.Game;
 import model.Player;
 import model.Pawn;
 
@@ -11,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class BoardView extends JFrame {
-
+    private GameController controller;
     private JLabel background;
     private Board board;
     private JButton playButton;
@@ -23,6 +25,7 @@ public class BoardView extends JFrame {
     private JLabel labelUser2;
     private JButton reversedButton;
     protected GridView gridView;
+
     private boolean isPlaying;
     private JLabel user1Name;
     private JLabel user2Name;
@@ -30,7 +33,8 @@ public class BoardView extends JFrame {
     private int user1Checkers = 20;
     private int user2Checkers = 20;
 
-    public BoardView(Board board) {
+    public BoardView(Board board, GameController controller) {
+        this.controller = controller;
         this.board = board;
         this.isPlaying = false;
 
@@ -45,6 +49,10 @@ public class BoardView extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.display();
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
     }
 
     public Board getBoard() {
@@ -89,41 +97,9 @@ public class BoardView extends JFrame {
         } else {
             this.setSize(450, 300);
             this.setResizable(true);
-            layout.setLayout(null);
 
-            playButton.setSize(150, 60);
-            playButton.setLocation(150, 200);
-            playButton.setBackground(Color.WHITE);
-            playButton.addActionListener(new ButtonListener(this));
-            layout.add(playButton);
-
-            labelUser1.setSize(200, 40);
-            labelUser1.setLocation(20, 110);
-            labelUser1.setForeground(Color.WHITE);
-            labelUser1.setFont(new Font("sans-serif", Font.BOLD, 18));
-            layout.add(labelUser1);
-
-            labelUser2.setSize(200, 40);
-            labelUser2.setLocation(20, 140);
-            labelUser2.setForeground(Color.WHITE);
-            labelUser2.setFont(new Font("sans-serif", Font.BOLD, 18));
-            layout.add(labelUser2);
-
-            textUser1.setSize(180, 25);
-            textUser1.setLocation(220, 115);
-            layout.add(textUser1);
-
-
-            textUser2.setSize(180, 25);
-            textUser2.setLocation(220, 145);
-
-            layout.add(textUser2);
-
-            ImageIcon imageIcon = new ImageIcon("src/main/resources/homepage.png");
-            JLabel label = new JLabel(imageIcon);
-            label.setSize(500, 500);
-            label.setLocation(-25, -100);
-            layout.add(label);
+            MenuView menuView = new MenuView(this.controller);
+            layout.add(menuView);
         }
 
         this.setContentPane(layout);
@@ -152,6 +128,12 @@ public class BoardView extends JFrame {
             userTurn.setText(textUser2.getText() + " turn");
             userTurn.setForeground(Color.red);
         }
+    }
+
+    public void update() {
+        this.display();
+        this.revalidate();
+        this.repaint();
     }
 
     public void setCheckersLeft(Pawn.PAWN_COLOR color){
