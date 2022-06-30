@@ -134,8 +134,8 @@ public class BoardView extends JFrame {
         } else {
             user1Checkers--;
         }
-        // user1Name.setText("<html>" + textUser1.getText() + "<br>Checkers remaining : " + user1Checkers + "</html>");
-        // user2Name.setText("<html>" + textUser2.getText() + "<br>Checkers remaining : " + user2Checkers + "</html>");
+        user1Name.setText("<html>" + this.getPlayer1Name() + "<br>Checkers remaining : " + user1Checkers + "</html>");
+        user2Name.setText("<html>" + this.getPlayer2Name() + "<br>Checkers remaining : " + user2Checkers + "</html>");
     }
 
 
