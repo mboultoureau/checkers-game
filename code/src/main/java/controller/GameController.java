@@ -23,8 +23,8 @@ public class GameController {
 
     /**
      *
-     * @param player1 Name of the player 1
-     * @param player2 Name of the player 2
+     * @param player1Name Name of the player 1
+     * @param player2Name Name of the player 2
      * @return A boolean indicating the success or failure of the name update
      */
     public boolean updatePlayersNames(String player1Name, String player2Name) {
@@ -47,4 +47,7 @@ public class GameController {
         this.boardView.update();
     }
 
+    public Game getGame() {
+        return this.game;
+    }
 }

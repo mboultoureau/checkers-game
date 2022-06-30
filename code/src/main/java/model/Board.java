@@ -36,6 +36,8 @@ public class Board {
     public void reset() {
         this.clearBoard();
         this.initBoard();
+        turn = Pawn.PAWN_COLOR.WHITE;
+        boardView.setTurn(turn);
     }
 
     public void clearBoard() {
@@ -455,9 +457,5 @@ public class Board {
 
             System.out.print("\n");
         }
-    }
-
-    public void update() {
-
     }
 }
